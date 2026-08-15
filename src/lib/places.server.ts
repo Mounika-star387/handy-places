@@ -22,7 +22,7 @@ export async function gateway(
   const res = await fetch(`${GATEWAY}${path}`, {
     method: init.method ?? "GET",
     headers,
-    body: init.body ? JSON.stringify(init.body) : undefined,
+    body: init.body ? JSON.stringify(init.body) : null,
   });
 
   if (!res.ok) {
