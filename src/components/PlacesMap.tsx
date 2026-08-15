@@ -108,7 +108,7 @@ export default function PlacesMap({
   }, [places, origin.lat, origin.lng]);
 
   useEffect(() => {
-    if (!activeId || !window.google) return;
+    if (!activeId || !window.google) return undefined;
     const idx = places.findIndex((p) => p.id === activeId);
     const marker = markersRef.current[idx];
     if (marker) {
@@ -116,6 +116,7 @@ export default function PlacesMap({
       const t = setTimeout(() => marker.setAnimation(null), 900);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [activeId, places]);
 
   return <div ref={ref} className="h-full min-h-[420px] w-full rounded-2xl bg-muted" />;
