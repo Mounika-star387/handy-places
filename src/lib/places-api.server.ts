@@ -96,9 +96,9 @@ export async function searchPlacesImpl(input: {
   lat: number;
   lng: number;
   radius: number;
-  category?: string | null;
-  keyword?: string | null;
-  openNow?: boolean;
+  category?: string | null | undefined;
+  keyword?: string | null | undefined;
+  openNow?: boolean | undefined;
 }): Promise<{ places: PlaceResult[] }> {
   const origin = { lat: input.lat, lng: input.lng };
   const cat = CATEGORIES.find((c) => c.id === input.category);
