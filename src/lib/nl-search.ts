@@ -39,11 +39,12 @@ export function parseQuery(input: string): ParsedQuery {
 
   const km = q.match(/(?:within|under|in)\s*(\d+(?:\.\d+)?)\s*(km|kilometer)/);
   const m = q.match(/(?:within|under|in)\s*(\d+)\s*(m|meter)\b/);
-  if (km) out.radius = Math.round(parseFloat(km[1]) * 1000);
-  else if (m) out.radius = parseInt(m[1], 10);
+  if (km?.[1]) out.radius = Math.round(parseFloat(km[1]) * 1000);
+  else if (m?.[1]) out.radius = parseInt(m[1], 10);
 
   const rating = q.match(/(?:rating|rated|stars?)\D{0,12}(\d(?:\.\d)?)|(\d(?:\.\d)?)\s*\+?\s*stars?/);
-  if (rating) out.minRating = parseFloat(rating[1] ?? rating[2]);
+  const ratingValue = rating?.[1] ?? rating?.[2];
+  if (ratingValue) out.minRating = parseFloat(ratingValue);
   if (/best rated|top rated|highest rated/.test(q)) {
     out.sort = "rating";
     out.minRating = out.minRating ?? 4;
@@ -56,9 +57,9 @@ export function parseQuery(input: string): ParsedQuery {
   }
 
   const price = q.match(/(?:under|below|less than|upto|up to)\s*(?:₹|rs\.?|inr)?\s*(\d{2,5})/);
-  if (price && !km && !m) out.maxPrice = parseInt(price[1], 10);
+  if (price?.[1] && !km && !m) out.maxPrice = parseInt(price[1], 10);
   const priceWithSymbol = q.match(/(?:under|below|less than)\s*(?:₹|rs\.?|inr)\s*(\d{2,5})/);
-  if (priceWithSymbol) out.maxPrice = parseInt(priceWithSymbol[1], 10);
+  if (priceWithSymbol?.[1]) out.maxPrice = parseInt(priceWithSymbol[1], 10);
 
   const cleaned = input
     .replace(/near me/gi, "")
